@@ -40,3 +40,5 @@ six==1.16.0
     # via
     #   -c requirements/prod.txt
     #   python-dateutil
+toml==0.10.2
+    # via -r requirements/dev.in
