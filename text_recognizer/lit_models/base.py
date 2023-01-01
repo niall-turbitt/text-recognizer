@@ -10,6 +10,7 @@ OPTIMIZER = "Adam"
 LR = 1e-3
 LOSS = "cross_entropy"
 ONE_CYCLE_TOTAL_STEPS = 100
+TASK = "multiclass"
 
 
 class BaseLitModel(pl.LightningModule):
@@ -32,13 +33,14 @@ class BaseLitModel(pl.LightningModule):
         self.lr = self.args.get("lr", LR)
 
         loss = self.args.get("loss", LOSS)
+        self.loss_fn = getattr(torch.nn.functional, loss)
 
         self.one_cycle_max_lr = self.args.get("one_cycle_max_lr", None)
         self.one_cycle_total_steps = self.args.get("one_cycle_total_steps", ONE_CYCLE_TOTAL_STEPS)
 
-        self.train_acc = Accuracy()
-        self.val_acc = Accuracy()
-        self.test_acc = Accuracy()
+        self.train_acc = Accuracy(task=TASK, num_classes=len(self.mapping))
+        self.val_acc = Accuracy(task=TASK, num_classes=len(self.mapping))
+        self.test_acc = Accuracy(task=TASK, num_classes=len(self.mapping))
 
     @staticmethod
     def add_to_argparse(parser):

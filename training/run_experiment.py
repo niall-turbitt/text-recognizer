@@ -60,8 +60,8 @@ def _setup_parser():
     model_group = parser.add_argument_group("Model Args")
     model_class.add_to_argparse(model_group)
 
-    # lit_model_group = parser.add_argument_group("LitModel Args")
-    # lit_models.BaseLitModel.add_to_argparse(lit_model_group)
+    lit_model_group = parser.add_argument_group("LitModel Args")
+    lit_models.BaseLitModel.add_to_argparse(lit_model_group)
 
     parser.add_argument("--help", "-h", action="help")
     return parser
@@ -73,31 +73,9 @@ def _ensure_logging_dir(experiment_dir):
     Path(experiment_dir).mkdir(parents=True, exist_ok=True)
 
 
-def main():
-    """
-    Run an experiment.
+def run(args: argparse.Namespace):
+    """Run experiment using PyTorch Lightning"""
 
-    Sample command:
-    ```
-    python training/run_experiment.py --max_epochs=3 --gpus='0,' --num_workers=20 --model_class=MLP --data_class=MNIST
-    ```
-
-    For basic help documentation, run the command
-    ```
-    python training/run_experiment.py --help
-    ```
-
-    The available command line args differ depending on some of the arguments, including --model_class and --data_class.
-
-    To see which command line args are available and read their documentation, provide values for those arguments
-    before invoking --help, like so:
-    ```
-    python training/run_experiment.py --model_class=MLP --data_class=MNIST --help
-    ```
-    """
-
-    parser = _setup_parser()
-    args = parser.parse_args()
     data, model = setup_data_and_model_from_args(args)
 
     lit_model_class = lit_models.BaseLitModel
@@ -133,7 +111,7 @@ def main():
         )
         callbacks.append(early_stopping_callback)
 
-    trainer = pl.Trainer.from_argparse_args(args, callbacks=callbacks, logger=logger)
+    trainer = pl.Trainer.from_argparse_args(args, callbacks=callbacks, logger=logger, accelerator="auto")
 
     trainer.fit(lit_model, datamodule=data)
 
@@ -143,6 +121,36 @@ def main():
         trainer.test(datamodule=data, ckpt_path=best_model_path)
     else:
         trainer.test(lit_model, datamodule=data)
+
+
+def main():
+    """
+    Run an experiment.
+
+    Sample command:
+    ```
+    python training/run_experiment.py --max_epochs=3 --gpus='0,' --num_workers=20 --model_class=MLP --data_class=MNIST
+    ```
+
+    For basic help documentation, run the command
+    ```
+    python training/run_experiment.py --help
+    ```
+
+    The available command line args differ depending on some of the arguments, including --model_class and --data_class.
+
+    To see which command line args are available and read their documentation, provide values for those arguments
+    before invoking --help, like so:
+    ```
+    python training/run_experiment.py --model_class=MLP --data_class=MNIST --help
+    ```
+    """
+
+    parser = _setup_parser()
+    args = parser.parse_args()
+
+    run(args=args)
+
 
 
 if __name__ == "__main__":

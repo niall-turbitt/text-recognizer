@@ -68,3 +68,6 @@ venv.bak/
 # logging
 *.ckpt
 lightning_logs/
+*/training/logs
+*/training/*sweep.yaml
+logs
