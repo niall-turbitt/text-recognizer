@@ -1,0 +1,4 @@
+-c prod.txt
+matplotlib
+scipy
+toml
