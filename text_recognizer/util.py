@@ -1,4 +1,4 @@
-"""Utility functions for text_recognizer module."""
+"""Common utility functions for text_recognizer module."""
 import base64
 import contextlib
 import hashlib
@@ -15,7 +15,7 @@ from tqdm import tqdm
 
 
 def to_categorical(y, num_classes):
-    """1-hot encode a tensor."""
+    """One-hot encode a tensor."""
     return np.eye(num_classes, dtype="uint8")[y]
 
 
@@ -44,7 +44,6 @@ def temporary_working_directory(working_dir: Union[str, Path]):
         os.chdir(curdir)
 
 
-# Hide lines below until Lab 08
 def read_b64_image(b64_string, grayscale=False):
     """Load base64-encoded images."""
     try:
@@ -79,19 +78,12 @@ def split_and_validate_b64_string(b64_string):
     return data_type, data
 
 
-# Hide lines above until Lab 08
-# Hide lines below until Lab 07
-
-
 def encode_b64_image(image, format="png"):
     """Encode a PIL image as a base64 string."""
     _buffer = BytesIO()  # bytes that live in memory
     image.save(_buffer, format=format)  # but which we write to like a file
     encoded_image = base64.b64encode(_buffer.getvalue()).decode("utf8")
     return encoded_image
-
-
-# Hide lines above until Lab 07
 
 
 def compute_sha256(filename: Union[Path, str]):
@@ -104,15 +96,12 @@ class TqdmUpTo(tqdm):
     """From https://github.com/tqdm/tqdm/blob/master/examples/tqdm_wget.py"""
 
     def update_to(self, blocks=1, bsize=1, tsize=None):
-        """
-        Parameters
-        ----------
-        blocks: int, optional
-            Number of blocks transferred so far [default: 1].
-        bsize: int, optional
-            Size of each block (in tqdm units) [default: 1].
-        tsize: int, optional
-            Total size (in tqdm units). If [default: None] remains unchanged.
+        """_summary_
+
+        Args:
+            blocks : Number of blocks transferred so far. Defaults to 1.
+            bsize : Size of each block (in tqdm units). Defaults to 1.
+            tsize : Total size (in tqdm units). If [default: None] remains unchanged. Defaults to None.
         """
         if tsize is not None:
             self.total = tsize
