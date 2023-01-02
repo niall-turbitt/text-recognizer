@@ -114,7 +114,7 @@ class BaseImageToTextLitModel(BaseLitModel):  # pylint: disable=too-many-ancesto
         self.model = model
         self.args = vars(args) if args is not None else {}
 
-        self.inverse_mapping = {val: ind for ind, val in enumerate(self.mapping)}
+        self.inverse_mapping = {v: k for k, v in enumerate(self.mapping)}
         self.start_index = self.inverse_mapping["<S>"]
         self.end_index = self.inverse_mapping["<E>"]
         self.padding_index = self.inverse_mapping["<P>"]
