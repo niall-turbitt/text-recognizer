@@ -5,6 +5,8 @@ import pytorch_lightning as pl
 import torch
 from torchmetrics import Accuracy
 
+from .metrics import CharacterErrorRate
+
 
 OPTIMIZER = "Adam"
 LR = 1e-3
@@ -33,7 +35,8 @@ class BaseLitModel(pl.LightningModule):
         self.lr = self.args.get("lr", LR)
 
         loss = self.args.get("loss", LOSS)
-        self.loss_fn = getattr(torch.nn.functional, loss)
+        if loss not in ("transformer",):
+            self.loss_fn = getattr(torch.nn.functional, loss)
 
         self.one_cycle_max_lr = self.args.get("one_cycle_max_lr", None)
         self.one_cycle_total_steps = self.args.get("one_cycle_total_steps", ONE_CYCLE_TOTAL_STEPS)
@@ -103,3 +106,20 @@ class BaseLitModel(pl.LightningModule):
         self.log("test/loss", loss, on_step=False, on_epoch=True)
         self.log("test/acc", self.test_acc, on_step=False, on_epoch=True)
 
+
+class BaseImageToTextLitModel(BaseLitModel):  # pylint: disable=too-many-ancestors
+    """Base class for ImageToText models in PyTorch Lightning."""
+
+    def __init__(self, model, args: argparse.Namespace = None):
+        super().__init__(model, args)
+        self.model = model
+        self.args = vars(args) if args is not None else {}
+
+        self.inverse_mapping = {v: k for k, v in enumerate(self.mapping)}
+        self.start_index = self.inverse_mapping["<S>"]
+        self.end_index = self.inverse_mapping["<E>"]
+        self.padding_index = self.inverse_mapping["<P>"]
+
+        self.ignore_tokens = [self.start_index, self.end_index, self.padding_index]
+        self.val_cer = CharacterErrorRate(self.ignore_tokens)
+        self.test_cer = CharacterErrorRate(self.ignore_tokens)
