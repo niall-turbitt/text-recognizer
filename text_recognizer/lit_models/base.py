@@ -106,6 +106,20 @@ class BaseLitModel(pl.LightningModule):
         self.log("test/loss", loss, on_step=False, on_epoch=True)
         self.log("test/acc", self.test_acc, on_step=False, on_epoch=True)
 
+    def add_on_first_batch(self, metrics, outputs, batch_idx):
+        if batch_idx == 0:
+            outputs.update(metrics)
+
+    def add_on_logged_batches(self, metrics, outputs):
+        if self.is_logged_batch:
+            outputs.update(metrics)
+
+    def is_logged_batch(self):
+        if self.trainer is None:
+            return False
+        else:
+            return self.trainer._logger_connector.should_update_logs        
+
 
 class BaseImageToTextLitModel(BaseLitModel):  # pylint: disable=too-many-ancestors
     """Base class for ImageToText models in PyTorch Lightning."""
