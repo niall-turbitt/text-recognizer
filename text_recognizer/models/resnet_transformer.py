@@ -1,7 +1,7 @@
 """Model combining a ResNet with a Transformer for image-to-sequence tasks."""
 import argparse
 import math
-from typing import Any, Dict
+from typing import Any
 
 import torch
 from torch import nn
@@ -23,7 +23,7 @@ class ResnetTransformer(nn.Module):
 
     def __init__(
         self,
-        data_config: Dict[str, Any],
+        data_config: dict[str, Any],
         args: argparse.Namespace = None,
     ) -> None:
         super().__init__()
@@ -75,16 +75,13 @@ class ResnetTransformer(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Autoregressively produce sequences of labels from input images.
 
-        Parameters
-        ----------
-        x
-            (B, Ch, H, W) image, where Ch == 1 or Ch == 3
+        Args:
+            x (torch.Tensor): (B, Ch, H, W) image, where Ch == 1 or Ch == 3
 
-        Returns
-        -------
-        output_tokens
-            (B, Sy) with elements in [0, C-1] where C is num_classes
+        Returns:
+            torch.Tensor: (B, Sy) with elements in [0, C-1] where C is num_classes
         """
+
         B = x.shape[0]
         S = self.max_output_length
         x = self.encode(x)  # (Sx, B, E)
@@ -123,46 +120,39 @@ class ResnetTransformer(nn.Module):
     def encode(self, x: torch.Tensor) -> torch.Tensor:
         """Encode each image tensor in a batch into a sequence of embeddings.
 
-        Parameters
-        ----------
-        x
-            (B, Ch, H, W) image, where Ch == 1 or Ch == 3
+        Args:
+            x (torch.Tensor): (B, Ch, H, W) image, where Ch == 1 or Ch == 3
 
-        Returns
-        -------
-            (Sx, B, E) sequence of embeddings, going left-to-right, top-to-bottom from final ResNet feature maps
-        """
+        Returns:
+            torch.Tensor: (Sx, B, E) sequence of embeddings, going left-to-right, top-to-bottom from final ResNet feature maps
+        """   
+
         _B, C, _H, _W = x.shape
         if C == 1:
             x = x.repeat(1, 3, 1, 1)
         x = self.resnet(x)  # (B, RESNET_DIM, _H // 32, _W // 32),   (B, 512, 18, 20) in the case of IAMParagraphs
         x = self.encoder_projection(x)  # (B, E, _H // 32, _W // 32),   (B, 256, 18, 20) in the case of IAMParagraphs
 
-        # x = x * math.sqrt(self.dim)  # (B, E, _H // 32, _W // 32)  # This prevented any learning
         x = self.enc_pos_encoder(x)  # (B, E, Ho, Wo);     Ho = _H // 32, Wo = _W // 32
         x = torch.flatten(x, start_dim=2)  # (B, E, Ho * Wo)
         x = x.permute(2, 0, 1)  # (Sx, B, E);    Sx = Ho * Wo
         return x
 
-    def decode(self, x, y):
+    def decode(self, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
         """Decode a batch of encoded images x with guiding sequences y.
 
         During autoregressive inference, the guiding sequence will be previous predictions.
 
         During training, the guiding sequence will be the ground truth.
 
-        Parameters
-        ----------
-        x
-            (Sx, B, E) images encoded as sequences of embeddings
-        y
-            (B, Sy) guiding sequences with elements in [0, C-1] where C is num_classes
+        Args:
+            x (torch.Tensor): (Sx, B, E) images encoded as sequences of embeddings
+            y (torch.Tensor): (B, Sy) guiding sequences with elements in [0, C-1] where C is num_classes
 
-        Returns
-        -------
-        torch.Tensor
-            (Sy, B, C) batch of logit sequences
-        """
+        Returns:
+            torch.Tensor: (Sy, B, C) batch of logit sequences
+        """       
+
         y_padding_mask = y == self.padding_token
         y = y.permute(1, 0)  # (Sy, B)
         y = self.embedding(y) * math.sqrt(self.dim)  # (Sy, B, E)
