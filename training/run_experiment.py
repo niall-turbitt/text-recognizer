@@ -79,6 +79,8 @@ def run(args: argparse.Namespace):
     data, model = setup_data_and_model_from_args(args)
 
     lit_model_class = lit_models.BaseLitModel
+    if args.loss == "transformer":
+        lit_model_class = lit_models.TransformerLitModel
 
     if args.load_checkpoint is not None:
         lit_model = lit_model_class.load_from_checkpoint(args.load_checkpoint, args=args, model=model)
@@ -90,7 +92,7 @@ def run(args: argparse.Namespace):
     logger = pl.loggers.TensorBoardLogger(log_dir)
     experiment_dir = logger.log_dir
 
-    goldstar_metric = "validation/loss"
+    goldstar_metric = "validation/cer" if args.loss in ("transformer",) else "validation/loss"
     filename_format = "epoch={epoch:04d}-validation.loss={validation/loss:.3f}"
     checkpoint_callback = pl.callbacks.ModelCheckpoint(
         save_top_k=5,
