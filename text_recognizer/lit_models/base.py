@@ -78,6 +78,8 @@ class BaseLitModel(pl.LightningModule):
         self.log("train/acc", self.train_acc, on_step=False, on_epoch=True)
 
         outputs = {"loss": loss}
+
+        self.add_on_first_batch({"logits": logits.detach()}, outputs, batch_idx)
         
         return outputs
 
@@ -96,6 +98,8 @@ class BaseLitModel(pl.LightningModule):
         self.log("validation/acc", self.val_acc, on_step=False, on_epoch=True, prog_bar=True)
 
         outputs = {"loss": loss}
+
+        self.add_on_first_batch({"logits": logits.detach()}, outputs, batch_idx)
 
         return outputs
 

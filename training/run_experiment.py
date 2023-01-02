@@ -137,7 +137,7 @@ def main():
         callbacks.append(early_stopping_callback)
 
     print(args)
-    trainer = pl.Trainer.from_argparse_args(args, callbacks=callbacks, logger=logger, accelerator="auto")
+    trainer = pl.Trainer.from_argparse_args(args, callbacks=callbacks, logger=logger)
 
     trainer.fit(lit_model, datamodule=data)
 
