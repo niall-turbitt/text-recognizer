@@ -6,4 +6,4 @@ From https://www.nist.gov/itl/iad/image-group/emnist-dataset
 
 Original url is http://www.itl.nist.gov/iaui/vip/cs_links/EMNIST/matlab.zip
 
-We uploaded the same file to our S3 bucket for faster download.
+Data is read from the Full Stack Deep Learning S3 bucket for faster download.

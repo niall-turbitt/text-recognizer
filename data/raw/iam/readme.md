@@ -12,16 +12,18 @@ The IAM Handwriting Database contains forms of handwritten English text which ca
 
 First, all forms were placed into one directory called `forms`, from original directories like `formsA-D`.
 
-To save space, I converted the original PNG files to JPG, and resized them to half-size
+To save space,original PNG files have been converted to JPG, and resized them to half-size
 ```
 mkdir forms-resized
 cd forms
 ls -1 *.png | parallel --eta -j 6 convert '{}' -adaptive-resize 50% '../forms-resized/{.}.jpg'
 ```
 
+Data is read from the Full Stack Deep Learning S3 bucket for faster download.
+
 ## Split
 
-The data split we will use is loosely based on the IAM Lines Large Writer Independent Text Line Recognition Task (`lwitlrt`) which provides 4 data splits:
+The data split used is loosely based on the IAM Lines Large Writer Independent Text Line Recognition Task (`lwitlrt`) which provides 4 data splits:
  - Train: has 6,161 text lines from 747 pages written by 283 writers
  - Validation 1: has 900 text lines from 105 pages written by 46 writers
  - Validation 2: has 940 text lines from 115 pages written by 43 writers
@@ -37,7 +39,7 @@ To avoid missing out on all the dropped data, we slightly modify the data splits
  - use all text lines in a page and never drop text lines
  - merge Validation 1 and Validation 2 into a single Validation data split
  - all the missing pages of 157 writers are added to the train data split.
-Our final data splits are:
+The final data splits are:
  - Train: has 9,462 text lines from 1,087 pages written by 440 writers
  - Validation: has 1,926 text lines from 220 pages written by 89 writers
  - Test: has 1,965 text lines from 232 pages written by 128 writers
