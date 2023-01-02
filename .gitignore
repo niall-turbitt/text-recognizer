@@ -71,3 +71,6 @@ lightning_logs/
 */training/logs
 */training/*sweep.yaml
 logs
+
+# Misc
+.DS_Store
