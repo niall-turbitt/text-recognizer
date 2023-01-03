@@ -7,6 +7,7 @@ import pytorch_lightning as pl
 from pytorch_lightning.utilities.rank_zero import rank_zero_info, rank_zero_only
 import torch
 
+from text_recognizer import callbacks as cb
 from text_recognizer import lit_models
 from training.util import DATA_CLASS_MODULE, import_class, MODEL_CLASS_MODULE, setup_data_and_model_from_args
 
@@ -46,6 +47,18 @@ def _setup_parser():
         default=0,
         help="If non-zero, applies early stopping, with the provided value as the 'patience' argument."
         + " Default is 0.",
+    )
+    parser.add_argument(
+        "--wandb",
+        action="store_true",
+        default=False,
+        help="If passed, logs experiment results to Weights & Biases. Otherwise logs only to local Tensorboard.",
+    )
+    parser.add_argument(
+        "--profile",
+        action="store_true",
+        default=False,
+        help="If passed, uses the PyTorch Profiler to track computation, exported as a Chrome-style trace.",
     )
 
     # Get the data and model classes, so that we can add their specific arguments
@@ -130,11 +143,20 @@ def main():
     summary_callback = pl.callbacks.ModelSummary(max_depth=2)
 
     callbacks = [summary_callback, checkpoint_callback]
+    if args.wandb:
+        logger = pl.loggers.WandbLogger(log_model="all", save_dir=str(log_dir), job_type="train")
+        logger.watch(model, log_freq=max(100, args.log_every_n_steps))
+        logger.log_hyperparams(vars(args))
+        experiment_dir = logger.experiment.dir
+    callbacks += [cb.ModelSizeLogger(), cb.LearningRateMonitor()]
     if args.stop_early:
         early_stopping_callback = pl.callbacks.EarlyStopping(
             monitor="validation/loss", mode="min", patience=args.stop_early
         )
         callbacks.append(early_stopping_callback)
+
+    if args.wandb and args.loss in ("transformer",):
+        callbacks.append(cb.ImageToTextLogger())
 
     print(args)
     trainer = pl.Trainer.from_argparse_args(args, callbacks=callbacks, logger=logger)
@@ -144,6 +166,8 @@ def main():
     best_model_path = checkpoint_callback.best_model_path
     if best_model_path:
         rank_zero_info(f"Best model saved at: {best_model_path}")
+        if args.wandb:
+            rank_zero_info("Best model also uploaded to W&B ")
         trainer.test(datamodule=data, ckpt_path=best_model_path)
     else:
         trainer.test(lit_model, datamodule=data)
