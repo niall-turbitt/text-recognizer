@@ -7,3 +7,4 @@ toml
 tensorboard
 torch-tb-profiler
 wandb
+torchviz

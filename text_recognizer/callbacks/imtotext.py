@@ -3,7 +3,6 @@ from pytorch_lightning.utilities import rank_zero_only
 
 try:
     import wandb
-
     has_wandb = True
 except ImportError:
     has_wandb = False
