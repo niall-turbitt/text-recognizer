@@ -4,3 +4,6 @@ defusedxml
 matplotlib
 scipy
 toml
+tensorboard
+torch-tb-profiler
+wandb
