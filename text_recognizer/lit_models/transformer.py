@@ -8,7 +8,7 @@ from .util import replace_after
 
 
 class TransformerLitModel(BaseImageToTextLitModel):
-    """ Generic image to text PyTorch-Lightning module that must be initialized with a PyTorch module.
+    """Generic image to text PyTorch-Lightning module that must be initialized with a PyTorch module.
 
     The module must implement an encode and decode method, and the forward method
     should be the forward pass during inference.
@@ -31,7 +31,6 @@ class TransformerLitModel(BaseImageToTextLitModel):
         Returns:
             torch.Tensor: (B, C, Sy) logits
         """
-
         x = self.model.encode(x)
         output = self.model.decode(x, y)  # (Sy, B, C)
         return output.permute(1, 2, 0)  # (B, C, Sy)
@@ -116,13 +115,12 @@ class TransformerLitModel(BaseImageToTextLitModel):
         Args:
             logitlikes (torch.Tensor): (B, C, Sy) Tensor with classes as second dimension. The largest value is the one
                 whose index we will return. Logits, logprobs, and probs are all acceptable.
-            replace_after_end (bool, optional): Whether to replace values after the first appearance of the end token with the padding token. 
-                Defaults to True.
+            replace_after_end (bool, optional): Whether to replace values after the first appearance of the end token
+                with the padding token. Defaults to True.
 
         Returns:
             torch.Tensor: (B, Sy) Tensor of integers in [0, C-1] representing predictions.
-        """    
-
+        """
         raw = torch.argmax(logitlikes, dim=1)  # (B, C, Sy) -> (B, Sy)
         if replace_after_end:
             return replace_after(raw, self.end_index, self.padding_index)  # (B, Sy)

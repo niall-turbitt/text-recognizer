@@ -46,7 +46,6 @@ class LineCNNSimple(nn.Module):
                            S can be computed from W and CHAR_WIDTH
                            C is self.num_classes
         """
-
         B, _C, H, W = x.shape
         assert H == IMAGE_SIZE  # Make sure we can use our CNN class
 

@@ -13,9 +13,7 @@ FC_DROPOUT = 0.25
 
 
 class ConvBlock(nn.Module):
-    """
-    Simple 3x3 conv with padding size 1 (to leave the input size unchanged), followed by a ReLU.
-    """
+    """Simple 3x3 conv with padding size 1 (to leave the input size unchanged), followed by a ReLU."""
 
     def __init__(self, input_channels: int, output_channels: int) -> None:
         super().__init__()
@@ -30,8 +28,7 @@ class ConvBlock(nn.Module):
 
         Returns:
             torch.Tensor: (B, C, H, W) tensor
-        """            
-
+        """
         c = self.conv(x)
         r = self.relu(c)
         return r
