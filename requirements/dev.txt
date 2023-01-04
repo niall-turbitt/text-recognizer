@@ -15,6 +15,8 @@ certifi==2022.12.7
     #   -c requirements/prod.txt
     #   requests
     #   sentry-sdk
+cfgv==3.3.1
+    # via pre-commit
 charset-normalizer==2.1.1
     # via
     #   -c requirements/prod.txt
@@ -27,8 +29,12 @@ cycler==0.11.0
     # via matplotlib
 defusedxml==0.7.1
     # via -r requirements/dev.in
+distlib==0.3.6
+    # via virtualenv
 docker-pycreds==0.4.0
     # via wandb
+filelock==3.9.0
+    # via virtualenv
 fonttools==4.38.0
     # via matplotlib
 gitdb==4.0.10
@@ -41,8 +47,12 @@ google-auth==2.15.0
     #   tensorboard
 google-auth-oauthlib==0.4.6
     # via tensorboard
+graphviz==0.20.1
+    # via torchviz
 grpcio==1.51.1
     # via tensorboard
+identify==2.5.12
+    # via pre-commit
 idna==3.4
     # via
     #   -c requirements/prod.txt
@@ -55,6 +65,8 @@ markupsafe==2.1.1
     # via werkzeug
 matplotlib==3.6.2
     # via -r requirements/dev.in
+nodeenv==1.7.0
+    # via pre-commit
 numpy==1.24.1
     # via
     #   -c requirements/prod.txt
@@ -77,6 +89,10 @@ pillow==9.3.0
     # via
     #   -c requirements/prod.txt
     #   matplotlib
+platformdirs==2.6.2
+    # via virtualenv
+pre-commit==2.21.0
+    # via -r requirements/dev.in
 promise==2.3
     # via wandb
 protobuf==3.20.1
@@ -104,6 +120,7 @@ pytz==2022.7
 pyyaml==6.0
     # via
     #   -c requirements/prod.txt
+    #   pre-commit
     #   wandb
 requests==2.28.1
     # via
@@ -142,13 +159,25 @@ tensorboard-plugin-wit==1.8.1
     # via tensorboard
 toml==0.10.2
     # via -r requirements/dev.in
+torch==1.13.1
+    # via
+    #   -c requirements/prod.txt
+    #   torchviz
 torch-tb-profiler==0.4.1
     # via -r requirements/dev.in
+torchviz==0.0.2
+    # via -r requirements/dev.in
+typing-extensions==4.4.0
+    # via
+    #   -c requirements/prod.txt
+    #   torch
 urllib3==1.26.13
     # via
     #   -c requirements/prod.txt
     #   requests
     #   sentry-sdk
+virtualenv==20.17.1
+    # via pre-commit
 wandb==0.13.7
     # via -r requirements/dev.in
 werkzeug==2.2.2
