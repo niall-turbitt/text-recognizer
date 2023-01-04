@@ -17,17 +17,16 @@ repos:
 
   # black python autoformatting
   - repo: https://github.com/psf/black
-    rev: 22.3.0
+    rev: 22.12.0
     hooks:
       - id: black
     # additional configuration of black in pyproject.toml
 
   # flake8 python linter with all the fixins
   - repo: https://github.com/PyCQA/flake8
-    rev: 3.9.2
+    rev: 6.0.0
     hooks:
       - id: flake8
-        exclude: (lab01|lab02|lab03|lab04|lab06|lab07|lab08)
         additional_dependencies: [
           flake8-annotations, flake8-bandit, flake8-bugbear, flake8-black, flake8-docstrings,
           flake8-import-order, darglint, mypy, pycodestyle, pydocstyle]
@@ -36,6 +35,6 @@ repos:
 
   # shellcheck-py for linting shell files
   - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.8.0.4
+    rev: v0.9.0.2
     hooks:
       - id: shellcheck
