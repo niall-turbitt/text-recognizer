@@ -162,17 +162,17 @@ def main():
     # Profiler
     if args.profile:
         sched = torch.profiler.schedule(wait=0, warmup=3, active=4, repeat=0)
-        profiler = pl.profiler.PyTorchProfiler(export_to_chrome=True, schedule=sched, dirpath=experiment_dir)
+        profiler = pl.profilers.PyTorchProfiler(export_to_chrome=True, schedule=sched, dirpath=experiment_dir)
         profiler.STEP_FUNCTIONS = {"training_step"}  # only profile training
     else:
-        profiler = pl.profiler.PassThroughProfiler()
+        profiler = pl.profilers.PassThroughProfiler()
 
     trainer.profiler = profiler   
 
     # Fit model
     trainer.fit(lit_model, datamodule=data)
 
-    trainer.profiler = pl.profiler.PassThroughProfiler()  # turn profiling off during testing
+    trainer.profiler = pl.profilers.PassThroughProfiler()  # turn profiling off during testing
 
     best_model_path = checkpoint_callback.best_model_path
     if best_model_path:
