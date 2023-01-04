@@ -76,8 +76,7 @@ class LineCNNTransformer(nn.Module):
 
         Returns:
             torch.Tensor: (Sx, B, E) logits
-        """      
-
+        """
         x = self.line_cnn(x)  # (B, E, Sx)
         x = x * math.sqrt(self.dim)
         x = x.permute(2, 0, 1)  # (Sx, B, E)
@@ -93,8 +92,7 @@ class LineCNNTransformer(nn.Module):
 
         Returns:
             _type_: (Sy, B, C) logits
-        """        
-
+        """
         y_padding_mask = y == self.padding_token
         y = y.permute(1, 0)  # (Sy, B)
         y = self.embedding(y) * math.sqrt(self.dim)  # (Sy, B, E)
@@ -115,8 +113,7 @@ class LineCNNTransformer(nn.Module):
 
         Returns:
             torch.Tensor: (B, Sy) with elements in [0, C-1] where C is num_classes
-        """   
-        
+        """
         B = x.shape[0]
         S = self.max_output_length
         x = self.encode(x)  # (Sx, B, E)

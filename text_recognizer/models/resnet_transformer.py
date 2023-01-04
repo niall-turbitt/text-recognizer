@@ -81,7 +81,6 @@ class ResnetTransformer(nn.Module):
         Returns:
             torch.Tensor: (B, Sy) with elements in [0, C-1] where C is num_classes
         """
-
         B = x.shape[0]
         S = self.max_output_length
         x = self.encode(x)  # (Sx, B, E)
@@ -125,8 +124,7 @@ class ResnetTransformer(nn.Module):
 
         Returns:
             torch.Tensor: (Sx, B, E) sequence of embeddings, going left-to-right, top-to-bottom from final ResNet feature maps
-        """   
-
+        """
         _B, C, _H, _W = x.shape
         if C == 1:
             x = x.repeat(1, 3, 1, 1)
@@ -151,8 +149,7 @@ class ResnetTransformer(nn.Module):
 
         Returns:
             torch.Tensor: (Sy, B, C) batch of logit sequences
-        """       
-
+        """
         y_padding_mask = y == self.padding_token
         y = y.permute(1, 0)  # (Sy, B)
         y = self.embedding(y) * math.sqrt(self.dim)  # (Sy, B, E)

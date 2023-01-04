@@ -7,8 +7,7 @@ import torch.nn as nn
 
 
 class PositionalEncodingImage(nn.Module):
-    """
-    Module used to add 2-D positional encodings to the feature-map produced by the encoder.
+    """Module used to add 2-D positional encodings to the feature-map produced by the encoder.
 
     Following https://arxiv.org/abs/2103.06450 by Sumeet Singh.
     """

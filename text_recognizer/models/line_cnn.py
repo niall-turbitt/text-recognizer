@@ -19,9 +19,7 @@ WINDOW_STRIDE = 8
 
 
 class ConvBlock(nn.Module):
-    """
-    Simple 3x3 conv with padding size 1 (to leave the input size unchanged), followed by a ReLU.
-    """
+    """Simple 3x3 conv with padding size 1 (to leave the input size unchanged), followed by a ReLU."""
 
     def __init__(
         self,
@@ -44,14 +42,13 @@ class ConvBlock(nn.Module):
         Returns:
             torch.Tensor: (B, C, H, W) tensor
         """
-
         c = self.conv(x)
         r = self.relu(c)
         return r
 
 
 class LineCNN(nn.Module):
-    """Model that uses a simple CNN to process an image of a line of characters with a window, 
+    """Model that uses a simple CNN to process an image of a line of characters with a window,
     outputs a sequence of logits
     """
 
@@ -124,7 +121,6 @@ class LineCNN(nn.Module):
                           S can be computed from W and self.window_width
                           C is self.num_classes
         """
-
         _B, _C, _H, _W = x.shape
         x = self.convs(x)  # (B, FC_DIM, 1, Sx)
         x = x.squeeze(2).permute(0, 2, 1)  # (B, S, FC_DIM)

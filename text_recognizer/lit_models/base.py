@@ -16,9 +16,7 @@ TASK = "multiclass"
 
 
 class BaseLitModel(pl.LightningModule):
-    """
-    Generic PyTorch-Lightning class that must be initialized with a PyTorch module.
-    """
+    """Generic PyTorch-Lightning class that must be initialized with a PyTorch module."""
 
     def __init__(self, model, args: argparse.Namespace = None):
         super().__init__()
@@ -80,7 +78,7 @@ class BaseLitModel(pl.LightningModule):
         outputs = {"loss": loss}
 
         self.add_on_first_batch({"logits": logits.detach()}, outputs, batch_idx)
-        
+
         return outputs
 
     def _run_on_batch(self, batch, with_preds=False):
@@ -122,7 +120,7 @@ class BaseLitModel(pl.LightningModule):
         if self.trainer is None:
             return False
         else:
-            return self.trainer._logger_connector.should_update_logs        
+            return self.trainer._logger_connector.should_update_logs
 
 
 class BaseImageToTextLitModel(BaseLitModel):  # pylint: disable=too-many-ancestors

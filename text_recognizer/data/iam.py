@@ -222,7 +222,6 @@ def _get_region_from_xml_element(xml_elem: Any, xml_path: str) -> Optional[dict[
     Returns:
         Optional[dict[str, int]]
     """
-
     unit_elements = xml_elem.findall(xml_path)
     if not unit_elements:
         return None

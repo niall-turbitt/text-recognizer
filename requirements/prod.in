@@ -1,5 +1,5 @@
 h5py
-numpy>=1.12.0
+numpy
 requests
 torch
 pytorch-lightning

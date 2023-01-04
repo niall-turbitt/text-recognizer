@@ -84,11 +84,10 @@ def _setup_parser():
 def _ensure_logging_dir(experiment_dir):
     """Create the logging directory via the rank-zero process, if necessary."""
     Path(experiment_dir).mkdir(parents=True, exist_ok=True)
-    
+
 
 def main():
-    """
-    Run an experiment.
+    """Run an experiment.
 
     Sample command:
     ```
@@ -108,7 +107,6 @@ def main():
     python training/run_experiment.py --model_class=MLP --data_class=MNIST --help
     ```
     """
-
     parser = _setup_parser()
     args = parser.parse_args()
 

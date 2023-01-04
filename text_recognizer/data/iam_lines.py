@@ -112,7 +112,7 @@ class IAMLines(BaseDataModule):
 
 
 def generate_line_crops_and_labels(iam: IAM, split: str, scale_factor=IMAGE_SCALE_FACTOR):
-    """Create both cropped lines and associated labels from IAM, with resizing by default"""
+    """Create both cropped lines and associated labels from IAM, with resizing by default."""
     crops, labels = [], []
     for iam_id in iam.ids_by_split[split]:
         labels += iam.line_strings_by_id[iam_id]

@@ -4,8 +4,8 @@ import os
 from pathlib import Path
 from typing import Collection, Optional, Union
 
-import torch
 import pytorch_lightning as pl
+import torch
 from torch.utils.data import ConcatDataset, DataLoader
 
 from text_recognizer import util

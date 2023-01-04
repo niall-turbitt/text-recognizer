@@ -17,16 +17,15 @@ def first_appearance(x: torch.Tensor, element: Union[int, float], dim: int = 1) 
         ValueError: Only 1 or 2 dimensional Tensors allowed for x
 
     Returns:
-        torch.Tensor: Indices where element occurs in x. If element is not found, return length of x along dim. 
+        torch.Tensor: Indices where element occurs in x. If element is not found, return length of x along dim.
         One dimension smaller than x.
 
     Examples:
         >>> first_appearance(torch.tensor([[1, 2, 3], [2, 3, 3], [1, 1, 1], [3, 1, 1]]), 3)
         tensor([2, 1, 3, 0])
         >>> first_appearance(torch.tensor([1, 2, 3]), 1, dim=0)
-        tensor(0)        
+        tensor(0)
     """
-
     if x.dim() > 2 or x.dim() == 0:
         raise ValueError(f"only 1 or 2 dimensional Tensors allowed, got Tensor with dim {x.dim()}")
     matches = x == element
@@ -49,13 +48,12 @@ def replace_after(x: torch.Tensor, element: Union[int, float], replace: Union[in
 
     Examples:
         >>> replace_after(torch.tensor([[1, 2, 3], [2, 3, 3], [1, 1, 1], [3, 1, 1]]), 3, 4)
-            tensor([[1, 2, 3],
-                    [2, 3, 4],
-                    [1, 1, 1],
-                    [3, 4, 4]])
+        tensor([[1, 2, 3],
+                [2, 3, 4],
+                [1, 1, 1],
+                [3, 4, 4]])
 
     """
-
     first_appearances = first_appearance(x, element, dim=1)  # (B,)
     indices = torch.arange(0, x.shape[-1]).type_as(x)  # (S,)
     outs = torch.where(

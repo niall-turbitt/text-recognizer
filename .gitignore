@@ -66,11 +66,14 @@ venv.bak/
 .conda
 
 # logging
+wandb
+*.pt
 *.ckpt
 lightning_logs/
+logs
 */training/logs
 */training/*sweep.yaml
-logs
+flagged
 
 # Misc
 .DS_Store
