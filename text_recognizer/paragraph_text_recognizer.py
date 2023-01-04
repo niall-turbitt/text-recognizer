@@ -54,7 +54,8 @@ def main():
     parser.add_argument(
         "filename",
         type=str,
-        help="Name for an image file. This can be a local path, a URL, a URI from AWS/GCP/Azure storage, an HDFS path, or any other resource locator supported by the smart_open library.",
+        help="""Name for an image file. This can be a local path, a URL, a URI from AWS/GCP/Azure storage, an HDFS path,
+        or any other resource locator supported by the smart_open library.""",
     )
     args = parser.parse_args()
 
