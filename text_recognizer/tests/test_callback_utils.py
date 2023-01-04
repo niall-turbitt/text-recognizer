@@ -1,7 +1,6 @@
 """Tests for the text_recognizer.callbacks.util module."""
 import random
 import string
-import tempfile
 
 import pytorch_lightning as pl
 

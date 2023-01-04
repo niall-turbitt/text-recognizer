@@ -1,6 +1,7 @@
 #!/bin/bash
 set -uo pipefail
 set +e
+# See http://redsymbol.net/articles/unofficial-bash-strict-mode/
 
 FAILURE=false
 
