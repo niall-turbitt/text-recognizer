@@ -10,3 +10,4 @@ wandb
 torchviz
 pre-commit
 pytest
+pytest-cov
