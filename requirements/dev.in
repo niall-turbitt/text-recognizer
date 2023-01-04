@@ -1,0 +1,13 @@
+-c prod.txt
+boltons
+defusedxml
+matplotlib
+scipy
+toml
+tensorboard
+torch-tb-profiler
+wandb
+torchviz
+pre-commit
+pytest
+pytest-cov

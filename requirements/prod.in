@@ -1,0 +1,9 @@
+h5py
+numpy
+requests
+torch
+pytorch-lightning
+pillow
+tqdm
+torchvision
+smart_open[s3]
