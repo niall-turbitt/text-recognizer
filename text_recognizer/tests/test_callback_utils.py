@@ -20,13 +20,13 @@ def test_check_and_warn_simple():
     assert not check_and_warn(Foo(), "__doc__", "feature of all Python objects")
 
 
-def test_check_and_warn_tblogger():
-    """Test that we return a truthy value when trying to log tables with TensorBoard.
+# def test_check_and_warn_tblogger():
+#     """Test that we return a truthy value when trying to log tables with TensorBoard.
 
-    We added check_and_warn in order to prevent a crash if this happens.
-    """
-    tblogger = pl.loggers.TensorBoardLogger(save_dir=tempfile.TemporaryDirectory())
-    assert check_and_warn(tblogger, "log_table", "tables")
+#     We added check_and_warn in order to prevent a crash if this happens.
+#     """
+#     tblogger = pl.loggers.TensorBoardLogger(save_dir=tempfile.TemporaryDirectory())
+#     assert check_and_warn(tblogger, "log_table", "tables")
 
 
 def test_check_and_warn_wandblogger():

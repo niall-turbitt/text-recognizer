@@ -48,10 +48,10 @@ def replace_after(x: torch.Tensor, element: Union[int, float], replace: Union[in
 
     Examples:
         >>> replace_after(torch.tensor([[1, 2, 3], [2, 3, 3], [1, 1, 1], [3, 1, 1]]), 3, 4)
-            tensor([[1, 2, 3],
-                    [2, 3, 4],
-                    [1, 1, 1],
-                    [3, 4, 4]])
+        tensor([[1, 2, 3],
+                [2, 3, 4],
+                [1, 1, 1],
+                [3, 4, 4]])
 
     """
     first_appearances = first_appearance(x, element, dim=1)  # (B,)
