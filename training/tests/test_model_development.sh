@@ -6,9 +6,9 @@ FAILURE=false
 
 CI="${CI:-false}"
 if [ "$CI" = false ]; then
-  export WANDB_PROJECT="fsdl-testing-2022"
+  export WANDB_PROJECT="text-recognizer"
 else
-  export WANDB_PROJECT="fsdl-testing-2022-ci"
+  export WANDB_PROJECT="text-recognizer-ci"
 fi
 
 echo "training smaller version of real model class on real data"
