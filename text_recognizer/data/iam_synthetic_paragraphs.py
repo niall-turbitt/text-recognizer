@@ -37,8 +37,7 @@ class IAMSyntheticParagraphs(IAMParagraphs):
         self.dataset_len = self.args.get("dataset_len", DATASET_LEN)
 
     def prepare_data(self, *args, **kwargs) -> None:
-        """
-        Prepare IAM lines such that they can be used to generate synthetic paragraphs dataset in setup().
+        """Prepare IAM lines such that they can be used to generate synthetic paragraphs dataset in setup().
         This method is IAMLines.prepare_data + resizing of line crops.
         """
         if PROCESSED_DATA_DIRNAME.exists():
@@ -95,6 +94,7 @@ class IAMSyntheticParagraphs(IAMParagraphs):
         )
         return basic + data
 
+    @staticmethod
     def add_to_argparse(parser):
         parser.add_argument("--dataset_len", type=int, default=DATASET_LEN)
         return parser
