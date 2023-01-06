@@ -15,3 +15,4 @@ from .mnist import MNIST
 from .emnist import EMNIST
 from .iam_paragraphs import IAMParagraphs
 from .iam_lines import IAMLines
+from .iam_synthetic_paragraphs import IAMSyntheticParagraphs
