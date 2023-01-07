@@ -167,7 +167,7 @@ def main():
     else:
         profiler = pl.profilers.PassThroughProfiler()
 
-    trainer.profiler = profiler   
+    trainer.profiler = profiler
 
     # Fit model
     trainer.fit(lit_model, datamodule=data)
