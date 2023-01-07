@@ -85,25 +85,17 @@ def main(args):
 def find_artifact(entity: str, project: str, type: str, alias: str, run=None):
     """Finds the artifact of a given type with a given alias under the entity and project.
 
-    Parameters
-    ----------
-    entity
-        The name of the W&B entity under which the artifact is logged.
-    project
-        The name of the W&B project under which the artifact is logged.
-    type
-        The name of the type of the artifact.
-    alias : str
-        The alias for this artifact. This alias must be unique within the
-        provided type for the run, if provided, or for the project,
-        if the run is not provided.
-    run : str
-        Optionally, the run in which the artifact is located.
+    Args:
+        entity (str): The name of the W&B entity under which the artifact is logged.
+        project (str): The name of the W&B project under which the artifact is logged.
+        type (str): The name of the type of the artifact.
+        alias (str): The alias for this artifact. This alias must be unique within the
+            provided type for the run, if provided, or for the project,
+            if the run is not provided.
+        run (_type_, optional): Optionally, the run in which the artifact is located.. Defaults to None.
 
-    Returns
-    -------
-    Tuple[path, artifact]
-        An identifying path and an API handle for a matching artifact.
+    Returns:
+        _type_: An identifying path and an API handle for a matching artifact.
     """
     if run is not None:
         path = _find_artifact_run(entity, project, type=type, run=run, alias=alias)
@@ -227,13 +219,16 @@ def _setup_parser():
     parser.add_argument(
         "--fetch",
         action="store_true",
-        help=f"If provided, check ENTITY/FROM_PROJECT for an artifact with the provided STAGED_MODEL_NAME and download its latest version to {PROD_STAGING_ROOT}/STAGED_MODEL_NAME.",
+        help=f"""If provided, check ENTITY/FROM_PROJECT for an artifact with the provided STAGED_MODEL_NAME
+        and download its latest version to {PROD_STAGING_ROOT}/STAGED_MODEL_NAME.""",
     )
     parser.add_argument(
         "--entity",
         type=str,
         default=None,
-        help=f"Entity from which to download the checkpoint. Note that checkpoints are always uploaded to the logged-in wandb entity. Pass the value 'DEFAULT' to also download from default entity, which is currently {DEFAULT_ENTITY}.",
+        help=f"""Entity from which to download the checkpoint.
+        Note that checkpoints are always uploaded to the logged-in wandb entity.
+        Pass the value 'DEFAULT' to also download from default entity, which is currently {DEFAULT_ENTITY}.""",
     )
     parser.add_argument(
         "--from_project",
@@ -251,13 +246,16 @@ def _setup_parser():
         "--run",
         type=str,
         default=None,
-        help=f"Optionally, the name of a run to check for an artifact of type {MODEL_CHECKPOINT_TYPE} that has the provided CKPT_ALIAS. Default is None.",
+        help=f"""Optionally, the name of a run to check for an artifact of type
+        {MODEL_CHECKPOINT_TYPE} that has the provided CKPT_ALIAS.
+        Default is None.""",
     )
     parser.add_argument(
         "--ckpt_alias",
         type=str,
         default=BEST_CHECKPOINT_ALIAS,
-        help=f"Alias that identifies which model checkpoint should be staged.The artifact's alias can be set manually or programmatically elsewhere. Default is '{BEST_CHECKPOINT_ALIAS}'.",
+        help=f"""Alias that identifies which model checkpoint should be staged.
+        The artifact's alias can be set manually or programmatically elsewhere. Default is '{BEST_CHECKPOINT_ALIAS}'.""",
     )
     parser.add_argument(
         "--staged_model_name",

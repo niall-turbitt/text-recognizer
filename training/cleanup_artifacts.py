@@ -54,7 +54,9 @@ def _setup_parser():
         type=str,
         default=None,
         nargs="*",
-        help="One or more regular expressions to use to select runs (by display name) from which to remove artifacts. See wandb.Api.runs documentation for details on the syntax. Beware that this is a footgun and consider using interactively with --dryrun and -v. Default is None.",
+        help="""One or more regular expressions to use to select runs (by display name) from which to remove artifacts.
+        See wandb.Api.runs documentation for details on the syntax.
+        Beware that this is a footgun and consider using interactively with --dryrun and -v. Default is None.""",
         metavar="RUN_NAME_REGEX",
     )
 
