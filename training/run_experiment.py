@@ -55,6 +55,12 @@ def _setup_parser():
         help="If passed, logs experiment results to Weights & Biases. Otherwise logs only to local Tensorboard.",
     )
     parser.add_argument(
+        "--wandb_project_name",
+        type=str,
+        default="lightning_logs",
+        help="The name of the Weights & Biases project to which this run will belong.",
+    )
+    parser.add_argument(
         "--profile",
         action="store_true",
         default=False,
@@ -142,7 +148,10 @@ def main():
 
     callbacks = [summary_callback, checkpoint_callback]
     if args.wandb:
-        logger = pl.loggers.WandbLogger(log_model="all", save_dir=str(log_dir), job_type="train")
+        logger = pl.loggers.WandbLogger(project=args.wandb_project_name, 
+                                        log_model="all", 
+                                        save_dir=str(log_dir), 
+                                        job_type="train")
         logger.watch(model, log_freq=max(100, args.log_every_n_steps))
         logger.log_hyperparams(vars(args))
         experiment_dir = logger.experiment.dir
