@@ -148,10 +148,9 @@ def main():
 
     callbacks = [summary_callback, checkpoint_callback]
     if args.wandb:
-        logger = pl.loggers.WandbLogger(project=args.wandb_project_name, 
-                                        log_model="all", 
-                                        save_dir=str(log_dir), 
-                                        job_type="train")
+        logger = pl.loggers.WandbLogger(
+            project=args.wandb_project_name, log_model="all", save_dir=str(log_dir), job_type="train"
+        )
         logger.watch(model, log_freq=max(100, args.log_every_n_steps))
         logger.log_hyperparams(vars(args))
         experiment_dir = logger.experiment.dir
