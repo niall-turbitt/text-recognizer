@@ -6,14 +6,10 @@ import os
 from pathlib import Path
 from typing import Callable
 
-import warnings
-
 import gradio as gr
 from PIL import ImageStat
 from PIL.Image import Image
 import requests
-
-from app_gradio.s3_util import make_unique_bucket_name
 
 from text_recognizer.paragraph_text_recognizer import ParagraphTextRecognizer
 import text_recognizer.util as util
@@ -30,12 +26,7 @@ DEFAULT_PORT = 12500
 
 def main(args):
     predictor = PredictorBackend(url=args.model_url)
-    frontend = make_frontend(
-        predictor.run,
-        flagging=args.flagging,
-        gantry=args.gantry,
-        app_name=args.application
-    )
+    frontend = make_frontend(predictor.run, flagging=args.flagging, gantry=args.gantry, app_name=args.application)
     frontend.launch(
         server_name="0.0.0.0",  # make server accessible, binding all interfaces  # noqa: S104
         server_port=args.port,  # set a port to bind to, failing if unavailable
@@ -43,10 +34,7 @@ def main(args):
     )
 
 
-def make_frontend(
-    fn: Callable[[Image], str],
-    app_name: str = "text-recognizer"
-):
+def make_frontend(fn: Callable[[Image], str], app_name: str = "text-recognizer"):
     """Creates a gradio.Interface frontend for an image to text function."""
     examples_dir = Path("text_recognizer") / "tests" / "support" / "paragraphs"
     example_fnames = [elem for elem in os.listdir(examples_dir) if elem.endswith(".png")]
@@ -138,8 +126,8 @@ def _make_parser():
         "--model_url",
         default=None,
         type=str,
-        help="""Identifies a URL to which to send image data. 
-        Data is base64-encoded, converted to a utf-8 string, and then set via a POST request as JSON with the key 'image'. 
+        help="""Identifies a URL to which to send image data.
+        Data is base64-encoded, converted to a utf-8 string, and then set via a POST request as JSON with the key 'image'.
         Default is None, which instead sends the data to a model running locally.""",
     )
     parser.add_argument(
