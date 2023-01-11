@@ -7,3 +7,4 @@ pillow
 tqdm
 torchvision
 smart_open[s3]
+gradio==3.0.21
