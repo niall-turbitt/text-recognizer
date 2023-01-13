@@ -172,7 +172,6 @@ def save_model_to_torchscript(model, directory):
 
 
 def compile_and_save_tensorrt_to_torchscript(scripted_model, directory):
-
     inputs = [
         torch_tensorrt.Input(
             min_shape=[1, 1, 28, 28],
@@ -289,6 +288,14 @@ def _setup_parser():
         help=f"Name to give the staged model artifact. Default is '{DEFAULT_STAGED_MODEL_NAME}'.",
     )
     return parser
+    parser.add_argument(
+        "--tensor_rt",
+        type=bool,
+        default=False,
+        help="Compile and save model using Torch-TensorRT",
+    )
+    return parser
+
 
 
 if __name__ == "__main__":
