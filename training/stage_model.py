@@ -77,7 +77,10 @@ def main(args):
             # reload the model from that checkpoint
             model = load_model_from_checkpoint(metadata, directory=tmp_dir)
             # save the model to torchscript in the staging directory
-            save_model_to_torchscript(model, directory=prod_staging_directory)
+            scripted_model = save_model_to_torchscript(model, directory=prod_staging_directory)
+            # compile and save model using Torch-TensorRT
+            if args.tensor_rt:
+                compile_and_save_tensorrt_to_torchscript(scripted_model, directory=prod_staging_directory)
 
         # upload the staged model so it can be downloaded elsewhere
         upload_staged_model(staged_at, from_directory=prod_staging_directory)
