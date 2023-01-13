@@ -300,7 +300,6 @@ def _setup_parser():
     return parser
 
 
-
 if __name__ == "__main__":
     parser = _setup_parser()
     args = parser.parse_args()
