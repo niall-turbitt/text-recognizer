@@ -290,13 +290,13 @@ def _setup_parser():
         default=DEFAULT_STAGED_MODEL_NAME,
         help=f"Name to give the staged model artifact. Default is '{DEFAULT_STAGED_MODEL_NAME}'.",
     )
-    return parser
     parser.add_argument(
         "--tensor_rt",
         type=bool,
         default=False,
         help="Compile and save model using Torch-TensorRT",
     )
+
     return parser
 
 
