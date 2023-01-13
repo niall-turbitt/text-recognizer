@@ -13,6 +13,7 @@ from pathlib import Path
 import tempfile
 
 import torch
+import torch_tensorrt
 import wandb
 
 from text_recognizer.lit_models import TransformerLitModel
@@ -166,6 +167,30 @@ def save_model_to_torchscript(model, directory):
     scripted_model = model.to_torchscript(method="script", file_path=None)
     path = Path(directory) / STAGED_MODEL_FILENAME
     torch.jit.save(scripted_model, path)
+
+    return scripted_model
+
+
+def compile_and_save_tensorrt_to_torchscript(scripted_model, directory):
+
+    inputs = [
+        torch_tensorrt.Input(
+            min_shape=[1, 1, 28, 28],
+            opt_shape=[1, 1, 576, 640],
+            max_shape=[1, 1, 576, 640],
+            dtype=torch.half,
+        )
+    ]
+    enabled_precisions = {torch.float, torch.half}  # Run with fp16
+
+    compile_settings = {
+        "inputs": inputs,
+        "enabled_precisions": enabled_precisions,
+    }
+
+    trt_ts_module = torch_tensorrt.compile(scripted_model, **compile_settings)
+    path = Path(directory) / "trt_ts_" + STAGED_MODEL_FILENAME
+    torch.jit.save(trt_ts_module, path)
 
 
 def upload_staged_model(staged_at, from_directory):
