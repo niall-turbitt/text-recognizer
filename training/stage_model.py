@@ -7,6 +7,13 @@ If based on a model that is already converted and uploaded, the model file is do
 
 For details on how the W&B artifacts backing the checkpoints and models are handled,
 see the documenation for stage_model.find_artifact.
+
+Steps:
+    1. Get model weights and hyperparameters
+    from a tracked training run in W&B's cloud storage.
+    2. Reload the model as a `LightningModule` using those weights and hyperparameters.
+    3. Call `to_torchscript` on it.
+    4. Save that result to W&B's cloud storage.
 """
 import argparse
 from pathlib import Path
