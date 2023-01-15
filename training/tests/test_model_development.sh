@@ -20,7 +20,7 @@ python training/run_experiment.py --data_class=IAMParagraphs --model_class=Resne
 TRAIN_RUN=$(find ./training/logs/wandb/latest-run/* | grep -Eo "run-([[:alnum:]])+\.wandb" | sed -e "s/^run-//" -e "s/\.wandb//")
 
 echo "staging trained model from run $TRAIN_RUN"
-python training/stage_model.py --entity DEFAULT --run "$TRAIN_RUN" --ckpt_alias best_k --to_project "$WANDB_PROJECT" --from_project "$WANDB_PROJECT" || FAILURE=true
+python training/stage_model.py --entity DEFAULT --run "$TRAIN_RUN" --ckpt_alias best_k --to_project "$WANDB_PROJECT" --from_project "$WANDB_PROJECT" --staged_model_name test-dummy || FAILURE=true
 
 echo "fetching staged model"
 python training/stage_model.py --entity DEFAULT --fetch --from_project $WANDB_PROJECT --staged_model_name test-dummy || FAILURE=true
