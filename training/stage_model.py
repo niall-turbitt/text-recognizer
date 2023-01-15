@@ -20,7 +20,6 @@ from pathlib import Path
 import tempfile
 
 import torch
-# import torch_tensorrt
 import wandb
 
 from text_recognizer.lit_models import TransformerLitModel
@@ -84,7 +83,7 @@ def main(args):
             # reload the model from that checkpoint
             model = load_model_from_checkpoint(metadata, directory=tmp_dir)
             # save the model to torchscript in the staging directory
-            scripted_model = save_model_to_torchscript(model, directory=prod_staging_directory)
+            save_model_to_torchscript(model, directory=prod_staging_directory)
             # # compile and save model using Torch-TensorRT
             # if args.tensor_rt:
             #     compile_and_save_tensorrt_to_torchscript(scripted_model, directory=prod_staging_directory)
