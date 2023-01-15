@@ -16,7 +16,7 @@ from text_recognizer import util
 from text_recognizer.stems.paragraph import ParagraphStem
 
 
-STAGED_MODEL_DIRNAME = Path(__file__).resolve().parent / "artifacts" / "paragraph-text-recognizer"
+STAGED_MODEL_DIRNAME = Path(__file__).resolve().parent / "artifacts" / "paragraph_text_recognizer"
 MODEL_FILE = "model.pt"
 
 
