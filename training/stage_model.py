@@ -7,6 +7,13 @@ If based on a model that is already converted and uploaded, the model file is do
 
 For details on how the W&B artifacts backing the checkpoints and models are handled,
 see the documenation for stage_model.find_artifact.
+
+Steps:
+    1. Get model weights and hyperparameters
+    from a tracked training run in W&B's cloud storage.
+    2. Reload the model as a `LightningModule` using those weights and hyperparameters.
+    3. Call `to_torchscript` on it.
+    4. Save that result to W&B's cloud storage.
 """
 import argparse
 from pathlib import Path
@@ -77,6 +84,9 @@ def main(args):
             model = load_model_from_checkpoint(metadata, directory=tmp_dir)
             # save the model to torchscript in the staging directory
             save_model_to_torchscript(model, directory=prod_staging_directory)
+            # # compile and save model using Torch-TensorRT
+            # if args.tensor_rt:
+            #     compile_and_save_tensorrt_to_torchscript(scripted_model, directory=prod_staging_directory)
 
         # upload the staged model so it can be downloaded elsewhere
         upload_staged_model(staged_at, from_directory=prod_staging_directory)
@@ -166,6 +176,29 @@ def save_model_to_torchscript(model, directory):
     scripted_model = model.to_torchscript(method="script", file_path=None)
     path = Path(directory) / STAGED_MODEL_FILENAME
     torch.jit.save(scripted_model, path)
+
+    return scripted_model
+
+
+# def compile_and_save_tensorrt_to_torchscript(scripted_model, directory):
+#     inputs = [
+#         torch_tensorrt.Input(
+#             min_shape=[1, 1, 28, 28],
+#             opt_shape=[1, 1, 576, 640],
+#             max_shape=[1, 1, 576, 640],
+#             dtype=torch.half,
+#         )
+#     ]
+#     enabled_precisions = {torch.float, torch.half}  # Run with fp16
+
+#     compile_settings = {
+#         "inputs": inputs,
+#         "enabled_precisions": enabled_precisions,
+#     }
+
+#     trt_ts_module = torch_tensorrt.compile(scripted_model, **compile_settings)
+#     path = Path(directory) / "trt_ts_" + STAGED_MODEL_FILENAME
+#     torch.jit.save(trt_ts_module, path)
 
 
 def upload_staged_model(staged_at, from_directory):
@@ -263,6 +296,13 @@ def _setup_parser():
         default=DEFAULT_STAGED_MODEL_NAME,
         help=f"Name to give the staged model artifact. Default is '{DEFAULT_STAGED_MODEL_NAME}'.",
     )
+    # parser.add_argument(
+    #     "--tensor_rt",
+    #     type=bool,
+    #     default=False,
+    #     help="Compile and save model using Torch-TensorRT",
+    # )
+
     return parser
 
 

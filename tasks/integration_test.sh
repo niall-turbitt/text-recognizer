@@ -4,8 +4,8 @@ set +e
 
 FAILURE=false
 
-# ./training/tests/test_model_development.sh || FAILURE=true
-echo "Skipping Integration test"
+echo "Running integration test: ./training/tests/test_model_development.sh"
+./training/tests/test_model_development.sh || FAILURE=true
 
 if [ "$FAILURE" = true ]; then
   echo "Integration tests failed"
