@@ -27,7 +27,7 @@ RUN make conda-update
 #   removing environment-setting in /root/.bashrc
 RUN sed -i "s/mesg n || true/tty -s \&\& mesg n/" $HOME/.profile
 RUN sed -i "s/conda activate base//" $HOME/.bashrc
-SHELL ["conda", "run", "--no-capture-output", "-n", "fsdl-text-recognizer-2022", "/bin/bash", "-c"]
+SHELL ["conda", "run", "--no-capture-output", "-n", "text-recognizer", "/bin/bash", "-c"]
 
 # install the core requirements, then remove build files
 COPY ./requirements ./requirements
