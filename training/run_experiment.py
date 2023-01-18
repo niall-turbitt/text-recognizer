@@ -66,6 +66,12 @@ def _setup_parser():
         default=False,
         help="If passed, uses the PyTorch Profiler to track computation, exported as a Chrome-style trace.",
     )
+    parser.add_argument(
+        "--nsight_sys",
+        action="store_true",
+        default=False,
+        help="If passed, uses the NVIDIA Nsight Systems to profile the application.",
+    )
 
     # Get the data and model classes, so that we can add their specific arguments
     temp_args, _ = parser.parse_known_args()
@@ -164,7 +170,6 @@ def main():
     if args.wandb and args.loss in ("transformer",):
         callbacks.append(cb.ImageToTextLogger())
 
-    print(args)
     trainer = pl.Trainer.from_argparse_args(args, callbacks=callbacks, logger=logger)
 
     # Profiler
@@ -177,8 +182,16 @@ def main():
 
     trainer.profiler = profiler
 
+    # Enable NVIDIA Nsight Systems profiling if passed
+    if args.nsight_sys:
+        torch.cuda.cudart().cudaProfilerStart()
+
     # Fit model
     trainer.fit(lit_model, datamodule=data)
+
+    # Stop Nsight profiling
+    if args.nsight_sys:
+        torch.cuda.cudart().cudaProfilerStop()
 
     trainer.profiler = pl.profilers.PassThroughProfiler()  # turn profiling off during testing
 
