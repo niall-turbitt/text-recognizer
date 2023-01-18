@@ -170,7 +170,6 @@ def main():
     if args.wandb and args.loss in ("transformer",):
         callbacks.append(cb.ImageToTextLogger())
 
-    
     trainer = pl.Trainer.from_argparse_args(args, callbacks=callbacks, logger=logger)
 
     # Profiler
@@ -183,8 +182,16 @@ def main():
 
     trainer.profiler = profiler
 
+    # Enable NVIDIA Nsight Systems profiling if passed
+    if args.nsight_sys:
+        torch.cuda.cudart().cudaProfilerStart()
+
     # Fit model
     trainer.fit(lit_model, datamodule=data)
+
+    # Stop Nsight profiling
+    if args.nsight_sys:
+        torch.cuda.cudart().cudaProfilerStop()
 
     trainer.profiler = pl.profilers.PassThroughProfiler()  # turn profiling off during testing
 
